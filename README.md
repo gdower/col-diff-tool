@@ -1,6 +1,6 @@
 # CoL Diff Tool
 
-The col-diff-tool compares Global Species Database (GSD) statistics and taxon pages between different versions of the Catalogue of Life. The col-diff-tool uses [GNParser](https://github.com/GlobalNamesArchitecture/gnparser) to break scientific names down into their name componenets.
+The col-diff-tool is a web crawler that compares Global Species Database (GSD) statistics and taxon pages between different versions of the Catalogue of Life (CoL). The col-diff-tool uses [GNParser](https://github.com/GlobalNamesArchitecture/gnparser) to break scientific names down into their name componenets.
 
 # Installation
 
