@@ -9,7 +9,9 @@ git clone https://github.com/gdower/col-diff-tool.git
 cd col-diff-tool
 pip3 install -r requirements.txt
 
-# After [installing GNParser](https://github.com/GlobalNamesArchitecture/gnparser#command-line-tool-and-socket-server), run:
+After [installing GNParser](https://github.com/GlobalNamesArchitecture/gnparser#command-line-tool-and-socket-server), run:
+
+```
 docker run -p 0.0.0.0:9797:8080 gnames/gognparser -w 8080
 ```
 
