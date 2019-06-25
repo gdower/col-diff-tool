@@ -8,6 +8,7 @@ The col-diff-tool compares Global Species Database (GSD) statistics and taxon pa
 git clone https://github.com/gdower/col-diff-tool.git
 cd col-diff-tool
 pip3 install -r requirements.txt
+```
 
 After [installing GNParser](https://github.com/GlobalNamesArchitecture/gnparser#command-line-tool-and-socket-server), run:
 
