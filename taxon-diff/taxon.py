@@ -225,10 +225,13 @@ class Taxon:
             return '-'
 
     def equal_infraspecies(self, other):
-        if self.infraspecies == other.infraspecies:
-            return '+'
+        if self.infraspecies != [] or other.infraspecies != []:
+            if self.infraspecies == other.infraspecies:
+                return '+'
+            else:
+                return '-'
         else:
-            return '-'
+            return ' '
 
     def equal_common_names_references(self, other):
         if self.common_names_references == other.common_names_references:
