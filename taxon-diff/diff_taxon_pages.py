@@ -4,9 +4,10 @@ import config
 if __name__ == '__main__':
 
     ids = []
-    input_ids = open("test.tsv", "r")
+    input_ids = open("plus_minus_2019-09-14.tsv", "r")
     for line in input_ids:
-        ids.append(line.replace("\n", ""))
+        line_ids = line.replace('\n', '').replace('"', '').split('\t')
+        ids.append({'diff_key': line_ids[0], 'minus_key': line_ids[1], 'plus_key': line_ids[2]})
 
     diff_output = open('output/diff_taxon_output.html', 'w')
     diff_header = '<!DOCTYPE html><html lang="en-US"><head><title>CoL Diff Tool Output</title>' \
@@ -21,17 +22,15 @@ if __name__ == '__main__':
 
     not_found = []
 
-    for id in ids:
+    for id_dict in ids:
         colplus = Taxon('http://' + config.DIFF_URLS['dev_hostname2'] + ':' +
                         config.DIFF_URLS['dev_port2'] + '/' + config.DIFF_URLS['dev_dir2'] +
-                        '/details/species/id/' + id)
+                        '/details/species/id/' + id_dict['plus_key'])
         colminus = Taxon('http://' + config.DIFF_URLS['dev_hostname1'] + ':' +
-                        config.DIFF_URLS['dev_port1'] + '/' + config.DIFF_URLS['dev_dir1'] +
-                         '/details/species/id/' + id)
+                         config.DIFF_URLS['dev_port1'] + '/' + config.DIFF_URLS['dev_dir1'] +
+                         '/details/species/id/' + id_dict['minus_key'])
 
         # A R S R I C R t l c T D E C S G V U % O
-        print(colplus.status)
-        print(colminus.status)
         if colplus.status == '200' and colminus.status == '200':
             line = colplus.equal_sci_name(colminus) + ' ' + \
                    colplus.equal_references(colminus) + ' ' + \
@@ -53,16 +52,19 @@ if __name__ == '__main__':
                    colplus.equal_source_db_updated(colminus) + ' ' + \
                    colplus.equal_source_db_completeness(colminus) + ' ' + \
                    colplus.equal_source_url(colminus) + ' ' + \
-                   '<a href="http://ower.org/col_diff/diff.php?id=' + id + '" target="_blank">' + id + '</a>\n'
-            diff_output.write(line)
-            diff_output.flush()
+                   '<a href="http://ower.org/col_diff/diff.php?id=' + id_dict['diff_key'] + '" target="_blank">' + id_dict['diff_key'] + '</a>\n'
+
+            # only output lines with an issue
+            if '-' in line:
+                diff_output.write(line)
+                diff_output.flush()
         else:
             error_output.write('col-: ' + colminus.status + ' http://' + config.DIFF_URLS['dev_hostname2'] + ':' +
                                config.DIFF_URLS['dev_port2'] + '/' + config.DIFF_URLS['dev_dir2'] +
-                               '/details/species/id/' + id + '\n')
+                               '/details/species/id/' + id_dict['minus_key'] + '\n')
             error_output.write('col+: ' + colplus.status + ' http://' + config.DIFF_URLS['dev_hostname1'] + ':' +
                                config.DIFF_URLS['dev_port1'] + '/' + config.DIFF_URLS['dev_dir2'] +
-                               '/details/species/id/' + id + '\n')
+                               '/details/species/id/' + id_dict['plus_key'] + '\n')
             error_output.flush()
 
     diff_output.write(diff_footer)
